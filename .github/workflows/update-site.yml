@@ -1,4 +1,4 @@
-name: Update and publish electricity prices
+ name: Update and publish electricity prices
 
 on:
   workflow_dispatch:
@@ -7,9 +7,9 @@ on:
     branches:
       - main
     paths:
-      - index.html
-      - fetch_prices.py
-      - .github/workflows/update-site.yml
+      - "index.html"
+      - "fetch_prices.py"
+      - ".github/workflows/update-site.yml"
 
   schedule:
     - cron: "17 * * * *"
@@ -54,17 +54,14 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-           - name: Upload website
+      - name: Upload website
         uses: actions/upload-pages-artifact@v4
         with:
-          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+          name: "github-pages-${{ github.run_id }}-${{ github.run_attempt }}"
           path: public
 
       - name: Publish website
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
-      - name: Publish website
-        id: deployment
-        uses: actions/deploy-pages@v4
+          artifact_name: "github-pages-${{ github.run_id }}-${{ github.run_attempt }}"
