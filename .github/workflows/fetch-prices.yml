@@ -1,0 +1,32 @@
+name: Fetch PVPC prices
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch-prices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Download repository files
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Fetch and validate PVPC prices
+        run: python fetch_prices.py
+
+      - name: Save JSON as downloadable test result
+        uses: actions/upload-artifact@v4
+        with:
+          name: pvpc-prices-test
+          path: data/prices.json
+          if-no-files-found: error
+          retention-days: 7
