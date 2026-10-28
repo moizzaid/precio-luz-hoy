@@ -1,13 +1,17 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Precio de la luz hoy por horas</title>
+
+  <title>Precio de la luz hoy por horas | PVPC</title>
+
   <meta name="description"
-        content="Consulta información sobre el precio de la luz por horas en España.">
+        content="Consulta los precios horarios PVPC de la electricidad en la España peninsular, con las horas más baratas y caras.">
+
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -15,64 +19,226 @@
       color: #172033;
       line-height: 1.6;
     }
+
     header {
-      padding: 24px;
+      padding: 22px;
       background: #123458;
       color: white;
       text-align: center;
+      font-size: 21px;
+      font-weight: 700;
     }
+
     main {
-      max-width: 960px;
-      margin: 32px auto;
-      padding: 0 20px;
+      max-width: 1050px;
+      margin: 30px auto;
+      padding: 0 18px;
     }
+
     .card {
       background: white;
-      padding: 28px;
-      border-radius: 16px;
+      padding: 24px;
+      border-radius: 14px;
       box-shadow: 0 4px 20px #00000008;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
+
     h1 { line-height: 1.2; }
+
+    .muted {
+      color: #596579;
+      font-size: 14px;
+    }
+
     .notice {
       background: #fff7db;
       border-left: 4px solid #e5a900;
-      padding: 16px;
+      padding: 14px;
     }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .stat {
+      padding: 18px;
+      border-radius: 12px;
+      background: #edf3fa;
+    }
+
+    .stat-label {
+      display: block;
+      color: #46546b;
+      font-size: 14px;
+    }
+
+    .stat-value {
+      display: block;
+      font-size: 23px;
+      font-weight: 700;
+      margin: 6px 0;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    caption {
+      text-align: left;
+      padding-bottom: 12px;
+      color: #596579;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e3e9f0;
+    }
+
+    th { background: #edf3fa; }
+
+    .cheapest { background: #e7f7ed; }
+    .expensive { background: #fff0ef; }
+
+    .current td:first-child {
+      border-left: 4px solid #2463eb;
+      font-weight: 700;
+    }
+
     footer {
       text-align: center;
       padding: 24px;
       color: #596579;
       font-size: 14px;
     }
+
+    a { color: #1754a3; }
+
+    [hidden] { display: none !important; }
   </style>
 </head>
+
 <body>
   <header>Precio Luz Hoy</header>
 
   <main>
     <section class="card">
       <h1>Precio de la luz hoy por horas</h1>
+
       <p>
-        Información sobre los precios horarios de la electricidad
-        en España.
+        Consulta los precios horarios PVPC para la España peninsular.
+        Horario: Europe/Madrid.
       </p>
+
       <p class="notice">
-        Web en pruebas. Los precios todavía no están publicados.
-        Estamos verificando la fuente, las unidades y las actualizaciones.
+        Web en pruebas. Mostramos la serie energética PVPC de REData,
+        no el importe total de una factura. No añadas ni interpretes
+        otros conceptos como incluidos sin comprobar su tratamiento.
+        Estos precios no representan necesariamente tu contrato.
       </p>
+
+      <p id="status" role="status" aria-live="polite">
+        Cargando precios…
+      </p>
+
+      <div id="today-content" hidden>
+        <h2 id="today-title"></h2>
+
+        <div class="grid">
+          <div class="stat">
+            <span class="stat-label">Precio de la hora actual</span>
+            <span class="stat-value" id="current-price"></span>
+            <span id="current-hour"></span>
+          </div>
+
+          <div class="stat">
+            <span class="stat-label">Media aritmética del día</span>
+            <span class="stat-value" id="average-price"></span>
+          </div>
+
+          <div class="stat">
+            <span class="stat-label">Precio mínimo</span>
+            <span class="stat-value" id="minimum-price"></span>
+            <span id="minimum-hours"></span>
+          </div>
+
+          <div class="stat">
+            <span class="stat-label">Precio máximo</span>
+            <span class="stat-value" id="maximum-price"></span>
+            <span id="maximum-hours"></span>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <caption>
+              Precios en €/kWh. Verde: mínimo del día.
+              Rojo: máximo del día.
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Hora</th>
+                <th scope="col">Precio €/kWh</th>
+                <th scope="col">Información</th>
+              </tr>
+            </thead>
+            <tbody id="today-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="muted" id="updated"></p>
     </section>
 
     <section class="card">
-      <h2>¿Qué podrás consultar?</h2>
-      <ul>
-        <li>Los precios de la electricidad por horas.</li>
-        <li>Las horas más baratas y más caras del día.</li>
-        <li>Los precios del día siguiente, cuando estén disponibles.</li>
-      </ul>
+      <h2>Precio de la luz mañana por horas</h2>
+      <p id="tomorrow-status">
+        Comprobando disponibilidad…
+      </p>
+
+      <div id="tomorrow-content" class="table-wrap" hidden>
+        <table>
+          <caption id="tomorrow-caption"></caption>
+          <thead>
+            <tr>
+              <th scope="col">Hora</th>
+              <th scope="col">Precio €/kWh</th>
+              <th scope="col">Información</th>
+            </tr>
+          </thead>
+          <tbody id="tomorrow-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Fuente y metodología</h2>
+
       <p>
-        Los precios PVPC corresponden a la tarifa regulada.
-        No representan necesariamente el precio de tu contrato.
+        Fuente:
+        <a href="https://www.ree.es/es/datos/mercados/precios-mercados-tiempo-real"
+           target="_blank" rel="noopener noreferrer">
+          Red Eléctrica de España / REData
+        </a>.
+        Serie PVPC 1001.
+      </p>
+
+      <p>
+        Los valores originales guardados en €/MWh se dividen entre
+        1.000 para mostrarlos en €/kWh. La media del día es la media
+        aritmética de los registros horarios disponibles de un día
+        completo; no es una estimación de tu factura.
+      </p>
+
+      <p>
+        Si falta el día actual o sus registros están incompletos,
+        no mostramos datos antiguos como si fueran los de hoy.
       </p>
     </section>
   </main>
@@ -80,5 +246,313 @@
   <footer>
     Web informativa independiente. No vendemos electricidad ni gas.
   </footer>
+
+  <script>
+    const TIME_ZONE = "Europe/Madrid";
+    const el = id => document.getElementById(id);
+
+    const dateKeyFormatter = new Intl.DateTimeFormat("en-CA", {
+      timeZone: TIME_ZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    });
+
+    const hourFormatter = new Intl.DateTimeFormat("es-ES", {
+      timeZone: TIME_ZONE,
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    });
+
+    const longDateFormatter = new Intl.DateTimeFormat("es-ES", {
+      timeZone: TIME_ZONE,
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+
+    const timestampFormatter = new Intl.DateTimeFormat("es-ES", {
+      timeZone: TIME_ZONE,
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+
+    const priceFormatter = new Intl.NumberFormat("es-ES", {
+      minimumFractionDigits: 5,
+      maximumFractionDigits: 5
+    });
+
+    let savedData = null;
+
+    function dateKey(date) {
+      const parts = dateKeyFormatter.formatToParts(date);
+      const fields = Object.fromEntries(
+        parts.map(part => [part.type, part.value])
+      );
+      return `${fields.year}-${fields.month}-${fields.day}`;
+    }
+
+    function nextDateKey(key) {
+      const date = new Date(`${key}T12:00:00Z`);
+      date.setUTCDate(date.getUTCDate() + 1);
+      return date.toISOString().slice(0, 10);
+    }
+
+    function formattedDate(key) {
+      return longDateFormatter.format(
+        new Date(`${key}T12:00:00Z`)
+      );
+    }
+
+    function formattedPrice(value) {
+      return `${priceFormatter.format(value)} €/kWh`;
+    }
+
+    function hourLabel(row) {
+      const start = new Date(row.datetime);
+      const end = new Date(start.getTime() + 3600000);
+      const offset = row.datetime.match(/(Z|[+-]\d{2}:\d{2})$/);
+      const suffix = offset ? ` (UTC${offset[1] === "Z" ? "+00:00" : offset[1]})` : "";
+
+      return (
+        `${hourFormatter.format(start)}–${hourFormatter.format(end)}`
+        + suffix
+      );
+    }
+
+    function validatedPrices(day, key) {
+      if (!day || day.status !== "complete") return null;
+
+      if (
+        !Number.isInteger(day.expected_hours) ||
+        ![23, 24, 25].includes(day.expected_hours) ||
+        !Array.isArray(day.prices) ||
+        day.prices.length !== day.expected_hours
+      ) {
+        return null;
+      }
+
+      const prices = [...day.prices];
+
+      for (const row of prices) {
+        const timestamp = new Date(row.datetime);
+
+        if (
+          !Number.isFinite(timestamp.getTime()) ||
+          !/(Z|[+-]\d{2}:\d{2})$/.test(row.datetime) ||
+          typeof row.price_eur_kwh !== "number" ||
+          !Number.isFinite(row.price_eur_kwh) ||
+          dateKey(timestamp) !== key
+        ) {
+          return null;
+        }
+      }
+
+      prices.sort(
+        (a, b) => new Date(a.datetime) - new Date(b.datetime)
+      );
+
+      for (let i = 1; i < prices.length; i++) {
+        if (
+          new Date(prices[i].datetime) -
+          new Date(prices[i - 1].datetime) !== 3600000
+        ) {
+          return null;
+        }
+      }
+
+      return prices;
+    }
+
+    function renderTable(targetId, prices, now) {
+      const target = el(targetId);
+      target.replaceChildren();
+
+      const values = prices.map(row => row.price_eur_kwh);
+      const minimum = Math.min(...values);
+      const maximum = Math.max(...values);
+
+      for (const row of prices) {
+        const tr = document.createElement("tr");
+        const value = row.price_eur_kwh;
+        const start = new Date(row.datetime).getTime();
+        const isCurrent =
+          now.getTime() >= start &&
+          now.getTime() < start + 3600000;
+
+        const labels = [];
+
+        if (value === minimum) {
+          tr.classList.add("cheapest");
+          labels.push("Precio mínimo");
+        }
+
+        if (value === maximum) {
+          tr.classList.add("expensive");
+          labels.push("Precio máximo");
+        }
+
+        if (isCurrent) {
+          tr.classList.add("current");
+          labels.push("Hora actual");
+        }
+
+        for (const text of [
+          hourLabel(row),
+          priceFormatter.format(value),
+          labels.join(" · ") || "—"
+        ]) {
+          const td = document.createElement("td");
+          td.textContent = text;
+          tr.appendChild(td);
+        }
+
+        target.appendChild(tr);
+      }
+    }
+
+    function render(data) {
+      const now = new Date();
+      const today = dateKey(now);
+      const tomorrow = nextDateKey(today);
+
+      el("today-content").hidden = true;
+      el("tomorrow-content").hidden = true;
+
+      const todayPrices = validatedPrices(data.days?.[today], today);
+      const tomorrowPrices = validatedPrices(
+        data.days?.[tomorrow], tomorrow
+      );
+
+      if (todayPrices) {
+        const values = todayPrices.map(row => row.price_eur_kwh);
+        const minimum = Math.min(...values);
+        const maximum = Math.max(...values);
+        const average =
+          values.reduce((sum, value) => sum + value, 0)
+          / values.length;
+
+        const current = todayPrices.find(row => {
+          const start = new Date(row.datetime).getTime();
+          return now.getTime() >= start &&
+                 now.getTime() < start + 3600000;
+        });
+
+        el("status").textContent =
+          "Datos del día disponibles. Web en pruebas.";
+        el("today-title").textContent = formattedDate(today);
+
+        el("current-price").textContent = current
+          ? formattedPrice(current.price_eur_kwh)
+          : "No disponible";
+
+        el("current-hour").textContent = current
+          ? hourLabel(current)
+          : "";
+
+        el("average-price").textContent = formattedPrice(average);
+        el("minimum-price").textContent = formattedPrice(minimum);
+        el("maximum-price").textContent = formattedPrice(maximum);
+
+        el("minimum-hours").textContent = todayPrices
+          .filter(row => row.price_eur_kwh === minimum)
+          .map(hourLabel)
+          .join("; ");
+
+        el("maximum-hours").textContent = todayPrices
+          .filter(row => row.price_eur_kwh === maximum)
+          .map(hourLabel)
+          .join("; ");
+
+        renderTable("today-table", todayPrices, now);
+        el("today-content").hidden = false;
+      } else {
+        el("status").textContent =
+          `No hay datos completos para hoy, ${formattedDate(today)}. `
+          + "No mostramos precios antiguos como actuales.";
+      }
+
+      if (tomorrowPrices) {
+        el("tomorrow-status").textContent =
+          "Datos del día siguiente disponibles.";
+        el("tomorrow-caption").textContent =
+          `${formattedDate(tomorrow)} · Precios en €/kWh`;
+        renderTable("tomorrow-table", tomorrowPrices, now);
+        el("tomorrow-content").hidden = false;
+      } else {
+        el("tomorrow-status").textContent =
+          "Los precios de mañana todavía no están disponibles "
+          + "en esta web.";
+      }
+
+      const messages = [];
+
+      for (const [label, value] of [
+        ["Datos descargados", data.fetched_at],
+        ["Actualización de la fuente", data.source_updated_at]
+      ]) {
+        const date = new Date(value);
+        if (value && Number.isFinite(date.getTime())) {
+          messages.push(`${label}: ${timestampFormatter.format(date)}`);
+        }
+      }
+
+      el("updated").textContent =
+        messages.join(" · ") + " · Horario de Madrid";
+    }
+
+    async function loadPrices() {
+      try {
+        const response = await fetch("./data/prices.json", {
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (
+          data.unit !== "EUR/kWh" ||
+          String(data.series_id) !== "1001" ||
+          data.timezone !== TIME_ZONE ||
+          data.region !== "peninsular" ||
+          !data.days
+        ) {
+          throw new Error("Unexpected data format");
+        }
+
+        render(data);
+        savedData = data;
+      } catch (error) {
+        console.error("Price loading error:", error);
+
+        if (savedData) {
+          render(savedData);
+          el("status").textContent +=
+            " No se ha podido comprobar una actualización; "
+            + "consulta la fecha de descarga.";
+        } else {
+          el("today-content").hidden = true;
+          el("tomorrow-content").hidden = true;
+          el("status").textContent =
+            "No se han podido cargar los precios. "
+            + "Inténtalo de nuevo más tarde.";
+          el("tomorrow-status").textContent =
+            "No se ha podido comprobar la disponibilidad.";
+        }
+      }
+    }
+
+    loadPrices();
+
+    setInterval(() => {
+      if (savedData) render(savedData);
+    }, 60000);
+
+    setInterval(loadPrices, 300000);
+  </script>
 </body>
 </html>
