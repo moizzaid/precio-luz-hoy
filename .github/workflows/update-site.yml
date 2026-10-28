@@ -1,0 +1,64 @@
+name: Update and publish electricity prices
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+    paths:
+      - index.html
+      - fetch_prices.py
+      - .github/workflows/update-site.yml
+
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: electricity-pages
+  cancel-in-progress: false
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Download repository files
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Fetch and validate fresh prices
+        run: python fetch_prices.py
+
+      - name: Prepare website files
+        run: |
+          mkdir -p public/data
+          cp index.html public/index.html
+          cp data/prices.json public/data/prices.json
+          touch public/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+
+      - name: Publish website
+        id: deployment
+        uses: actions/deploy-pages@v4
