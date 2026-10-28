@@ -1,5 +1,4 @@
- name: Update and publish electricity prices
-
+name: Update and publish electricity prices
 on:
   workflow_dispatch:
 
