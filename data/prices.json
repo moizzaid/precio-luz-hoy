@@ -1,0 +1,146 @@
+{
+  "source": "Red Eléctrica de España / REData",
+  "source_url": "https://apidatos.ree.es/es/datos/mercados/precios-mercados-tiempo-real?start_date=2026-10-28T00%3A00&end_date=2026-10-29T23%3A59&time_trunc=hour&geo_trunc=electric_system&geo_limit=peninsular&geo_ids=8741",
+  "series_id": "1001",
+  "tariff": "PVPC",
+  "region": "peninsular",
+  "timezone": "Europe/Madrid",
+  "unit": "EUR/kWh",
+  "fetched_at": "2026-10-28T15:41:30.100894+01:00",
+  "source_updated_at": "2026-10-27T20:46:04.000+01:00",
+  "days": {
+    "2026-10-28": {
+      "status": "complete",
+      "expected_hours": 24,
+      "received_hours": 24,
+      "prices": [
+        {
+          "datetime": "2026-10-28T00:00:00+01:00",
+          "price_eur_mwh": 203.28,
+          "price_eur_kwh": 0.20328
+        },
+        {
+          "datetime": "2026-10-28T01:00:00+01:00",
+          "price_eur_mwh": 198.06,
+          "price_eur_kwh": 0.19806
+        },
+        {
+          "datetime": "2026-10-28T02:00:00+01:00",
+          "price_eur_mwh": 202.5,
+          "price_eur_kwh": 0.2025
+        },
+        {
+          "datetime": "2026-10-28T03:00:00+01:00",
+          "price_eur_mwh": 197.88,
+          "price_eur_kwh": 0.19788
+        },
+        {
+          "datetime": "2026-10-28T04:00:00+01:00",
+          "price_eur_mwh": 195.56,
+          "price_eur_kwh": 0.19556
+        },
+        {
+          "datetime": "2026-10-28T05:00:00+01:00",
+          "price_eur_mwh": 201.63,
+          "price_eur_kwh": 0.20163
+        },
+        {
+          "datetime": "2026-10-28T06:00:00+01:00",
+          "price_eur_mwh": 237.91,
+          "price_eur_kwh": 0.23791
+        },
+        {
+          "datetime": "2026-10-28T07:00:00+01:00",
+          "price_eur_mwh": 280.57,
+          "price_eur_kwh": 0.28057
+        },
+        {
+          "datetime": "2026-10-28T08:00:00+01:00",
+          "price_eur_mwh": 270.61,
+          "price_eur_kwh": 0.27061
+        },
+        {
+          "datetime": "2026-10-28T09:00:00+01:00",
+          "price_eur_mwh": 149.24,
+          "price_eur_kwh": 0.14924
+        },
+        {
+          "datetime": "2026-10-28T10:00:00+01:00",
+          "price_eur_mwh": 135.23,
+          "price_eur_kwh": 0.13523
+        },
+        {
+          "datetime": "2026-10-28T11:00:00+01:00",
+          "price_eur_mwh": 118.25,
+          "price_eur_kwh": 0.11825
+        },
+        {
+          "datetime": "2026-10-28T12:00:00+01:00",
+          "price_eur_mwh": 118.93,
+          "price_eur_kwh": 0.11893
+        },
+        {
+          "datetime": "2026-10-28T13:00:00+01:00",
+          "price_eur_mwh": 129.0,
+          "price_eur_kwh": 0.129
+        },
+        {
+          "datetime": "2026-10-28T14:00:00+01:00",
+          "price_eur_mwh": 64.63,
+          "price_eur_kwh": 0.06463
+        },
+        {
+          "datetime": "2026-10-28T15:00:00+01:00",
+          "price_eur_mwh": 93.34,
+          "price_eur_kwh": 0.09334
+        },
+        {
+          "datetime": "2026-10-28T16:00:00+01:00",
+          "price_eur_mwh": 175.88,
+          "price_eur_kwh": 0.17588
+        },
+        {
+          "datetime": "2026-10-28T17:00:00+01:00",
+          "price_eur_mwh": 276.3,
+          "price_eur_kwh": 0.2763
+        },
+        {
+          "datetime": "2026-10-28T18:00:00+01:00",
+          "price_eur_mwh": 382.59,
+          "price_eur_kwh": 0.38259
+        },
+        {
+          "datetime": "2026-10-28T19:00:00+01:00",
+          "price_eur_mwh": 401.2,
+          "price_eur_kwh": 0.4012
+        },
+        {
+          "datetime": "2026-10-28T20:00:00+01:00",
+          "price_eur_mwh": 397.9,
+          "price_eur_kwh": 0.3979
+        },
+        {
+          "datetime": "2026-10-28T21:00:00+01:00",
+          "price_eur_mwh": 374.13,
+          "price_eur_kwh": 0.37413
+        },
+        {
+          "datetime": "2026-10-28T22:00:00+01:00",
+          "price_eur_mwh": 291.16,
+          "price_eur_kwh": 0.29116
+        },
+        {
+          "datetime": "2026-10-28T23:00:00+01:00",
+          "price_eur_mwh": 262.93,
+          "price_eur_kwh": 0.26293
+        }
+      ]
+    },
+    "2026-10-29": {
+      "status": "unavailable",
+      "expected_hours": 24,
+      "received_hours": 0,
+      "prices": []
+    }
+  }
+}
