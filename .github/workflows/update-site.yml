@@ -43,11 +43,12 @@ jobs:
       - name: Fetch and validate fresh prices
         run: python fetch_prices.py
 
-      - name: Prepare website files
+           - name: Prepare website files
         run: |
           mkdir -p public/data
           cp index.html public/index.html
           cp data/prices.json public/data/prices.json
+          cp styles.css public/styles.css
           touch public/.nojekyll
 
       - name: Configure GitHub Pages
