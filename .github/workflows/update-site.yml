@@ -1,4 +1,4 @@
-name: Update and publish electricity prices
+ name: Update and publish electricity prices
 on:
   workflow_dispatch:
 
@@ -43,7 +43,7 @@ jobs:
       - name: Fetch and validate fresh prices
         run: python fetch_prices.py
 
-           - name: Prepare website files
+      - name: Prepare website files
         run: |
           mkdir -p public/data
           cp index.html public/index.html
